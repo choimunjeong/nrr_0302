@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">  //여러기기 화면 호환성을 위해서 최대한 weight를 활용하여 xml을 만듦
+    <ImageView
+        android:id="@+id/page3_1_x_map"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="#70808080"/>  //지도 넣을 자리
+
+    <LinearLayout
+        android:id="@+id/page3_1_x_station_info"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">  //역이름이랑 혜택 들어가는 레이아웃
+        <TextView
+            android:id="@+id/page3_1_x_stationName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="서울"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:background="#808080"/>  //역이름
+        <TextView
+            android:id="@+id/page3_1_x_station_benefit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:text="서울역 방문혜택"/>   //방문혜택
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_centerInParent="true"
+            style="?android:attr/progressBarStyle" />  //프로그레스바
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/page3_1_x_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>  //관광지 리사이클러뷰
+    </RelativeLayout>
+
+</LinearLayout>

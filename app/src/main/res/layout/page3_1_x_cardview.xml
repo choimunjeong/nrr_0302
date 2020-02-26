@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    //카em뷰는 하나의 위젯만 들어갈 수 있기 때문에, 먼저 리니어 레이아웃 만들고 그 안에 다른 위젯을 넣어준다.
+    <androidx.cardview.widget.CardView
+        android:id="@+id/page3_1_x_cardview"
+        card_view:cardCornerRadius="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/page3_1_x_image"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:background="@drawable/cardview_no_img" />   //관광 이미지
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:paddingLeft="10dp">
+                <TextView
+                    android:id="@+id/page3_1_x_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+                    android:text="경복궁" />          //관광지 이름
+                <TextView
+                    android:id="@+id/page3_1_x_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_below="@+id/title"
+                    android:text="역사/관광명소" />       //관광지 분류
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_below="@+id/cardview_type"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp"
+                        android:layout_weight="3" />          //weight값 맞추기 위한 빈 박스
+                    <Button
+                        android:id="@+id/page3_1_x_heart_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cardview_heart" />    //하트
+
+                    <Button
+                        android:id="@+id/page3_1_x_showMap_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cardview_pin" />     //해당 관광지 위치를 지도에서 보여주기 위한 버튼
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
