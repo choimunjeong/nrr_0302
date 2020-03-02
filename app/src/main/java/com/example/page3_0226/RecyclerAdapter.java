@@ -17,20 +17,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+
         Context context;
         List<Recycler_item> items;
         int item_layout;
+
 public RecyclerAdapter(Context context, List<Recycler_item> items, int item_layout) {
         this.context=context;
         this.items=items;
         this.item_layout=item_layout;
         }
 
+
 @Override
 public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.page3_1_x_cardview,null);
         return new ViewHolder(v);
         }
+
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 @Override
@@ -45,12 +49,14 @@ public void onClick(View v) {
         Toast.makeText(context,item.getTitle(),Toast.LENGTH_SHORT).show();
         }
         });
-        }
+    }
+
 
 @Override
 public int getItemCount() {
         return this.items.size();
         }
+
 
 public class ViewHolder extends RecyclerView.ViewHolder {
     ImageView image;

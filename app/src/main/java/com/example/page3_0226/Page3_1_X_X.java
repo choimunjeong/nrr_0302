@@ -10,5 +10,6 @@ public class Page3_1_X_X extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page3_1_x_x);
+
     }
 }

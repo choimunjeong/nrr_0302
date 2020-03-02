@@ -1,55 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">  //여러기기 화면 호환성을 위해서 최대한 weight를 활용하여 xml을 만듦
-    <ImageView
-        android:id="@+id/page3_1_x_map"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:background="#70808080"/>  //지도 넣을 자리
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/rootview"
+    tools:context=".Page3_1_X">
 
-    <LinearLayout
-        android:id="@+id/page3_1_x_station_info"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal">  //역이름이랑 혜택 들어가는 레이아웃
-        <TextView
-            android:id="@+id/page3_1_x_stationName"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="서울"
-            android:gravity="center"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:background="#808080"/>  //역이름
-        <TextView
-            android:id="@+id/page3_1_x_station_benefit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:text="서울역 방문혜택"/>   //방문혜택
-    </LinearLayout>
+        android:layout_height="@dimen/app_bar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6">
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:layout_centerInParent="true"
-            style="?android:attr/progressBarStyle" />  //프로그레스바
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/page3_1_x_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>  //관광지 리사이클러뷰
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+            <RelativeLayout
+                android:id="@+id/map_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_launcher_background">
+                <Button
+                    android:id="@+id/reset_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지도리셋버튼"
+                    android:textSize="10dp"
+                    android:textColor="#000000"
+                    android:gravity="top|center"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@drawable/rounding"
+                    android:layout_margin="5dp"/>
+            </RelativeLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:titleTextColor="#000000"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:layout_collapseMode="pin" >
+                <TextView
+                    android:id="@+id/region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:textColor="#000000"
+                    android:textStyle="bold"
+                    android:text="서울"/>
+                <TextView
+                    android:id="@+id/benefit"
+                    android:layout_marginLeft="50dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:textColor="#80000000"
+                    android:textStyle="bold"
+                    android:textSize="10dp"
+                    android:text="사은품 있음 | 숙박할인 있음 | 음식점할인 있음      ( 더보기-> "/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    android:src="@drawable/benefit_url"
+                    android:id="@+id/benefit_url"/>
+            </androidx.appcompat.widget.Toolbar>//app:popupTheme="@style/AppTheme.PopupOverlay" 얘는 뭐지
 
-</LinearLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/page3_1_x_content_scrolling" />
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

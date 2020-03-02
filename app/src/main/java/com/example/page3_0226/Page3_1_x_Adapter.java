@@ -19,34 +19,35 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.appbar.AppBarLayout;
 
 import java.util.List;
 
 public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.ViewHolder> {
-    String state = "OFF";   //하트의 클릭 여부
+    String stay = "OFF";  // 하트의 클릭 여부
     Context context;
-    List<Item2> data;
+    List<Page3_1_X.Recycler_item> items;  //리사이클러뷰 안에 들어갈 값 저장
+    Page3_1_x_OnItemClick mCallback;
 
-    //메인에서 접근할 때, 이 부분을 씀
-    public Page3_1_x_Adapter(Context context, List<Item2> data) {
-        this.context = context;
-        this.data = data;   //리스트
+    //메인에서 불러올 때, 이 함수를 씀
+    public Page3_1_x_Adapter(Context context, List<Page3_1_X.Recycler_item> items, Page3_1_x_OnItemClick mCallback) {
+        this.context=context;
+        this.items=items;   //리스트
+        this.mCallback=mCallback;
     }
 
     @Override
-    public Page3_1_x_Adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.page3_1_x_cardview, null);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.page3_1_x_item_cardview,null);
         return new ViewHolder(v);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        final Item2 item = data.get(position);
-        //이미지 뷰에 url 이미지 넣기
-        //gradle(project)->repositories 에 mavenCentral() 넣어줌
-        //gradle(app)->dependecied 에 아래 두줄 넣어줌
-        //    implementation 'com.github.bumptech.glide:glide:4.9.0'
-        //    annotationProcessor 'com.github.bumptech.glide:glide:4.9.0'
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Page3_1_X.Recycler_item item=items.get(position);
+
+        //이미지뷰에 url 이미지 넣기.
         Glide.with(context).load(item.getImage()).centerCrop().into(holder.image);
         holder.title.setText(item.getTitle());
 
@@ -54,14 +55,14 @@ public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.Vi
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-                if (state == "OFF") {
+                if(stay=="OFF"){
                     holder.heart.setBackgroundResource(R.drawable.cardview_heart);
-                    state = "ON";
-                    Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
-                } else {
+                    stay = "ON";
+                    Toast.makeText(context,item.getTitle(),Toast.LENGTH_SHORT).show();
+                } else{
                     holder.heart.setBackgroundResource(R.drawable.cardview_heart_off);
-                    state = "OFF";
-                    Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                    stay = "OFF";
+                    Toast.makeText(context,item.getTitle(),Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -69,58 +70,56 @@ public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.Vi
         holder.image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, item.getContentviewID(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, Page3_1_X_X.class);
+                Toast.makeText(context,item.getContentviewID(),Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(context, Page3_detail.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                context.startActivity(intent);
+            }
+        });
 
-                //이 부분에서 contentId 넘기고, 다음 액티비티에서 url로 바로 연결시키면 될 듯
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+        //맵 띄우는 버튼 -> x, y좌표 전달 + 맵을 위에서 끌어내림
+        holder.pin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,item.getContentviewID()+"------"+item.getMapx()+"------"+item.getMapy(),Toast.LENGTH_SHORT).show();
+
+                //맵을 위에서 끌어내리는 부분
+                AppBarLayout appBarLayout=(AppBarLayout)((Page3_1_X)v.getContext()).findViewById(R.id.app_bar);
+                appBarLayout.setExpanded(true);
+
+                //터치된 해당 관광지 좌표 전달
+                double x = Double.parseDouble(item.getMapx());
+                double y = Double.parseDouble(item.getMapy());
+
+                if(mCallback!=null){
+                    mCallback.onClick(x,y, item.getTitle());
+                }
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return this.data.size();
+        return this.items.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView image;   //관광지 사진
-        TextView title;    //관광지 이름
+        ImageView image;
+        TextView title;
         CardView cardview;
-        Button heart;       //하트 버튼
+        Button heart;
+        Button pin;
 
-        public ViewHolder(@NonNull View itemView) {
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.page3_1_x_image);
-            title = (TextView) itemView.findViewById(R.id.page3_1_x_title);
-            cardview = (CardView) itemView.findViewById(R.id.page3_1_x_cardview);
-            heart = (Button) itemView.findViewById(R.id.page3_1_x_heart_btn);
+            heart = (Button)itemView.findViewById(R.id.cardview_heart);
+            image=(ImageView)itemView.findViewById(R.id.image);
+            title=(TextView)itemView.findViewById(R.id.title);
+            cardview=(CardView)itemView.findViewById(R.id.cardview);
+            pin=(Button)itemView.findViewById(R.id.cardview_pin);
+
         }
     }
 
-    public static class Item2 {
-        String image;
-        String title;
-        String contentviewID;
-
-        String getImage() {
-            return this.image;
-        }
-
-        String getTitle() {
-            return this.title;
-        }
-
-        String getContentviewID() {
-            return this.contentviewID;
-        }
-
-
-        Item2(String image, String title, String contentviewID) {
-            this.image = image;
-            this.title = title;
-            this.contentviewID = contentviewID;
-        }
-    }
 }
