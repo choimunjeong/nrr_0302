@@ -1,7 +1,9 @@
 package com.example.page3_0226;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,11 +110,27 @@ public class Page3_Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 itemTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(v.getContext(),data.get(position).text, Toast.LENGTH_SHORT).show();
+
+                        //프로그레스 다이얼로그
+                        final ProgressDialog asyncDialog = new ProgressDialog( v.getContext());
+                        asyncDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                        asyncDialog.setMessage(data.get(position).text+"(으)로 이동중입니다..");
+                        asyncDialog.show();
+
+                        //터치된 역명을 다음 액티비티로 전달
                         Intent intent = new Intent(context, Page3_1_X.class);
                         intent.putExtra("st_name", data.get(position).text);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);  //이게 없으면 오류남
                         context.startActivity(intent);
+
+                        //0.5초 후, 다이얼로그 없앰
+                        Handler mHandler = new Handler();
+                        mHandler.postDelayed(new Runnable()  {
+                            public void run() {
+                                // 시간 지난 후 실행할 코딩
+                                asyncDialog.cancel();
+                            }
+                        }, 500); // 0.5초후
                     }
                 });
         }

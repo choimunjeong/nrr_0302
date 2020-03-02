@@ -1,5 +1,8 @@
 package com.example.page3_0226;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.net.Uri;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -48,7 +52,11 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
     String[] _name = new String[3];           //txt에서 받은 역이름
     String[] _areaCode = new String[3];       //txt에서 받은 지역코드
     String[] _sigunguCode = new String[3];    //txt에서 받은 시군구코드
-    String st_name, areaCode, sigunguCode;            //전달받은 역의 지역코드, 시군구코드
+    String[] _x = new String[3];              //txt에서 받은 x좌표
+    String[] _y = new String[3];              //txt에서 받은 y좌표
+    String[] _benefitURL = new String[3];     //txt에서 받은 혜택url
+    String st_name, areaCode, sigunguCode, benefitURL;            //전달받은 역의 지역코드, 시군구코드, 혜택URL
+    Double x, y;                                      //전달받은 역의 x,y 좌표
 
     String name_1[] = new String[10];  //returnResult를 줄바꿈 단위로 쪼개서 넣은 배열/ name_1[0]에는 한 관광지의 이름,url,contentId,위치가 다 들어가 있다.
     String name_2[] = new String[10];  //name_1를 "  " 단위로 쪼개서 넣은 배열/ [0]= contentID/ [1]=mapx/ [2]에= mapy/ [3]= img_Url/ [4]= name이 들어가 있다.
@@ -126,8 +134,25 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
         benefit_url.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.rail-ro.com/kor/benefit/menu_01.html?a=1&pmode=view&station01=1&station02=6&page=1"));
-                startActivity(intent);
+
+                //혜택이 없을 경우
+                if(benefitURL.equals("혜택없음")){
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Page3_1_X.this);
+                    alertDialogBuilder .setMessage(st_name + "역은 혜택이 없습니다.")
+                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                public void onClick( DialogInterface dialog, int id) {
+                                    // 프로그램을 종료한다
+                                   dialog.cancel(); } });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialogBuilder.show();
+                }
+
+                //있을 경우, url로 연결해준다.
+                else {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(benefitURL));
+                    startActivity(intent);
+                }
+
 
             }
         });
@@ -158,7 +183,7 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
         //카카오맵은 1개만 선언할 수 있대.
         mapView = new MapView(this);
         mapViewContainer.addView(mapView,0);
-        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(37.566297, 126.977946), 8, true);
+        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(y, x), 8, true);
         marker = new MapPOIItem();
 
 
@@ -257,6 +282,9 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
             _name[i] = arr_line[0];         //서울
             _areaCode[i] = arr_line[1];     //1
             _sigunguCode[i] = arr_line[2];  //0
+            _y[i] = arr_line[3];            //y좌표
+            _x[i] = arr_line[4];            //x좌표
+            _benefitURL[i] = arr_line[5];
         }
     }
 
@@ -265,8 +293,11 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
     private void compareStation(){
         for(int i=0; i<_name.length; i++){
             if(st_name.equals(_name[i])){
-                areaCode = _areaCode[i];        //string으로 되어있는 걸 int로 형변환
+                areaCode = _areaCode[i];
                 sigunguCode = _sigunguCode[i];
+                y = Double.parseDouble(_y[i]);     //string으로 되어있는 걸 double로 형변환
+                x = Double.parseDouble(_x[i]);
+                benefitURL = _benefitURL[i];
             }
         }
     }

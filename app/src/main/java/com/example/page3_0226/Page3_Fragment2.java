@@ -1,5 +1,6 @@
 package com.example.page3_0226;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -146,7 +147,6 @@ public class Page3_Fragment2 extends Fragment {
 
         //구분선 넣기
         page3_recyclerview.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
-
 
         return v;
     }
