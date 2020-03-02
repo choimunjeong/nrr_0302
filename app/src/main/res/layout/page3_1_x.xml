@@ -50,7 +50,7 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:layout_collapseMode="pin" >
                 <TextView
-                    android:id="@+id/region"
+                    android:id="@+id/page3_1_x_region"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:visibility="invisible"

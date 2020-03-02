@@ -24,10 +24,10 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.List;
 
 public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.ViewHolder> {
-    String stay = "OFF";  // 하트의 클릭 여부
-    Context context;
-    List<Page3_1_X.Recycler_item> items;  //리사이클러뷰 안에 들어갈 값 저장
-    Page3_1_x_OnItemClick mCallback;
+    private String stay = "OFF";  // 하트의 클릭 여부
+    private Context context;
+    private List<Page3_1_X.Recycler_item> items;  //리사이클러뷰 안에 들어갈 값 저장
+    private Page3_1_x_OnItemClick mCallback;
 
     //메인에서 불러올 때, 이 함수를 씀
     public Page3_1_x_Adapter(Context context, List<Page3_1_X.Recycler_item> items, Page3_1_x_OnItemClick mCallback) {
@@ -36,6 +36,7 @@ public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.Vi
         this.mCallback=mCallback;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.page3_1_x_item_cardview,null);
@@ -71,9 +72,9 @@ public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.Vi
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,item.getContentviewID(),Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(context, Page3_detail.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                context.startActivity(intent);
+                Intent intent = new Intent(context, Page3_1_X_X.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
 

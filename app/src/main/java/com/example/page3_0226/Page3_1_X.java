@@ -43,6 +43,13 @@ import java.util.concurrent.ExecutionException;
 
 public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClick {
 
+    //역 이름을 받아서 지역코드랑 시군구코드 받기 위한 배열(현재 3개 지역만 넣어놔서 배열크기가 3임)
+    String[] arr_line = null;
+    String[] _name = new String[3];           //txt에서 받은 역이름
+    String[] _areaCode = new String[3];       //txt에서 받은 지역코드
+    String[] _sigunguCode = new String[3];    //txt에서 받은 시군구코드
+    String st_name, areaCode, sigunguCode;            //전달받은 역의 지역코드, 시군구코드
+
     String name_1[] = new String[10];  //returnResult를 줄바꿈 단위로 쪼개서 넣은 배열/ name_1[0]에는 한 관광지의 이름,url,contentId,위치가 다 들어가 있다.
     String name_2[] = new String[10];  //name_1를 "  " 단위로 쪼개서 넣은 배열/ [0]= contentID/ [1]=mapx/ [2]에= mapy/ [3]= img_Url/ [4]= name이 들어가 있다.
 
@@ -54,7 +61,7 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
     String mapy[] = new String[10];        //Y좌표
     int length = name_1.length;
 
-    String returnResult;
+    String returnResult, url;
     String Url_front = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory&fname=";
 
     List<Recycler_item> items = new ArrayList<>();
@@ -65,7 +72,7 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
     MapPOIItem marker;
     ViewGroup mapViewContainer;
     Button reset_btn;
-    TextView region, benefit;
+    TextView page3_1_x_region, benefit;
     ImageView benefit_url;
 
 
@@ -74,7 +81,7 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page3_1_x);
 
-        region = (TextView)findViewById(R.id.region);
+        page3_1_x_region = (TextView)findViewById(R.id.page3_1_x_region);
         benefit = (TextView)findViewById(R.id.benefit);
         benefit_url = (ImageView)findViewById(R.id.benefit_url);
         mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -85,7 +92,7 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
                 if (Math.abs(verticalOffset) == appBarLayout.getTotalScrollRange()) {
                     // Collapsed
                     Log.d("접혔어!!!!", "접혔어!!");
-                    region.setVisibility(View.VISIBLE);
+                    page3_1_x_region.setVisibility(View.VISIBLE);
                     benefit.setVisibility(View.VISIBLE);
                     benefit_url.setVisibility(View.VISIBLE);
                 } else if (verticalOffset == 0) {
@@ -95,12 +102,24 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
                 } else {
                     // Somewhere in between
                     Log.d("중간이야!!!", "중간이야!!!!");
-                    region.setVisibility(View.INVISIBLE);
+                    page3_1_x_region.setVisibility(View.INVISIBLE);
                     benefit.setVisibility(View.INVISIBLE);
                     benefit_url.setVisibility(View.INVISIBLE);
                 }
             }
         });
+
+
+        //앞 액티비티에서 전달 값 받기
+        Intent intent = getIntent();
+        st_name = intent.getStringExtra("st_name");
+        page3_1_x_region.setText(st_name);
+
+        //txt 값 읽기
+        settingList();
+
+        //전달된 역의 지역코드, 시군구코드 찾기
+        compareStation();
 
 
         //혜택 URL로 넘기는 부분
@@ -214,6 +233,45 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
 
 
 
+    //txt 돌려 역 비교할 배열 만들기(이름 지역코드 동네코드)<-로 구성
+    private void settingList(){
+        String readStr = "";
+        AssetManager assetManager = getResources().getAssets();
+        InputStream inputStream = null;
+        try{
+            inputStream = assetManager.open("station_code.txt");
+            //버퍼리더에 대한 설명 참고 : https://coding-factory.tistory.com/251
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String str = null;
+            while (((str = reader.readLine()) != null)){ readStr += str + "\n";}
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String[] arr_all = readStr.split("\n"); //txt 내용을 줄바꿈 기준으로 나눈다.
+
+        //한 줄의 값을 띄어쓰기 기준으로 나눠서, 역명/지역코드/시군구코드 배열에 넣는다.
+        for(int i=0; i <arr_all.length; i++) {
+            arr_line = arr_all[i].split(" ");
+
+            _name[i] = arr_line[0];         //서울
+            _areaCode[i] = arr_line[1];     //1
+            _sigunguCode[i] = arr_line[2];  //0
+        }
+    }
+
+
+    //앞 액티비티에서 선택된 역과 같은 역을 찾는다.
+    private void compareStation(){
+        for(int i=0; i<_name.length; i++){
+            if(st_name.equals(_name[i])){
+                areaCode = _areaCode[i];        //string으로 되어있는 걸 int로 형변환
+                sigunguCode = _sigunguCode[i];
+            }
+        }
+    }
+
+
     //이 클래스는 어댑터와 서로 주고받으며 쓰는 클래스임
     public class Recycler_item {
         String image;
@@ -264,8 +322,25 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
         protected String doInBackground(String... strings) {
             Log.d("시작", "시작");
 
-            String url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
-                    "&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&sigunguCode=&areaCode=1&listYN=Y";
+            //시군구코드가 0 일 때와 0이 아닐때를 구분해서 url을 넣어준다.
+            if(sigunguCode.equals("0")){
+                url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=" +
+                        "7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
+                        "&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
+                        "sigunguCode=" +
+                        "&areaCode=" + areaCode +
+                        "&listYN=Y";
+            } else {
+                url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=" +
+                        "7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
+                        "&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
+                        "sigunguCode=" + sigunguCode +
+                        "&areaCode=" + areaCode +
+                        "&listYN=Y";
+            }
+//
+//            String url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
+//                    "&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&sigunguCode=&areaCode=1&listYN=Y";
 
             URL xmlUrl;
             returnResult = "";
