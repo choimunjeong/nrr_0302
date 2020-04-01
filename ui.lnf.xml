@@ -1,5 +1,6 @@
 <application>
   <component name="UISettings">
+    <option name="MAX_LOOKUP_LIST_HEIGHT" value="12" />
     <option name="SHOW_ICONS_IN_QUICK_NAVIGATION" value="false" />
   </component>
 </application>
