@@ -3,6 +3,8 @@
     <extensionMap>
       <mapping pattern="index" type="HTML" />
       <mapping pattern="subPage" type="HTML" />
+      <mapping ext="db-journal" type="PHP" />
+      <mapping ext="db" type="PLAIN_TEXT" />
     </extensionMap>
   </component>
 </application>
