@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClick {
+public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClick{
 
     //역 이름을 받아서 지역코드랑 시군구코드 받기 위한 배열(현재 3개 지역만 넣어놔서 배열크기가 3임)
     String[] arr_line = null;
@@ -58,15 +58,15 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
     String st_name, areaCode, sigunguCode, benefitURL;            //전달받은 역의 지역코드, 시군구코드, 혜택URL
     Double x, y;                                      //전달받은 역의 x,y 좌표
 
-    String name_1[] = new String[10];  //returnResult를 줄바꿈 단위로 쪼개서 넣은 배열/ name_1[0]에는 한 관광지의 이름,url,contentId,위치가 다 들어가 있다.
-    String name_2[] = new String[10];  //name_1를 "  " 단위로 쪼개서 넣은 배열/ [0]= contentID/ [1]=mapx/ [2]에= mapy/ [3]= img_Url/ [4]= name이 들어가 있다.
+    String name_1[] = new String[20];  //returnResult를 줄바꿈 단위로 쪼개서 넣은 배열/ name_1[0]에는 한 관광지의 이름,url,contentId,위치가 다 들어가 있다.
+    String name_2[] = new String[5];  //name_1를 "  " 단위로 쪼개서 넣은 배열/ [0]= contentID/ [1]=mapx/ [2]에= mapy/ [3]= img_Url/ [4]= name이 들어가 있다.
 
     //xml 파싱한 값을 분류해서 쪼개 넣음
-    String name[] = new String[10];        //관광지 이름
-    String img_Url[] = new String[10];     //이미지 URL
-    String contentid[] = new String[10];   //관광지ID
-    String mapx[] = new String[10];        //X좌표
-    String mapy[] = new String[10];        //Y좌표
+    String name[] = new String[20];        //관광지 이름
+    String img_Url[] = new String[20];     //이미지 URL
+    String contentid[] = new String[20];   //관광지ID
+    String mapx[] = new String[20];        //X좌표
+    String mapy[] = new String[120];        //Y좌표
     int length = name_1.length;
 
     String returnResult, url;
@@ -83,11 +83,16 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
     TextView page3_1_x_region, benefit;
     ImageView benefit_url;
 
+    private DbOpenHelper mDbOpenHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page3_1_x);
+
+        mDbOpenHelper = new DbOpenHelper(this);
+        mDbOpenHelper.open();
+        mDbOpenHelper.create();
 
         page3_1_x_region = (TextView)findViewById(R.id.page3_1_x_region);
         benefit = (TextView)findViewById(R.id.benefit);
@@ -210,8 +215,10 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
             String RESULT = task.execute().get();
             Log.i("전달 받은 값", RESULT);
 
+
             //사진링크, 타이틀(관광명), 분야뭔지 분리
             name_1 = RESULT.split("\n");
+            Log.i("여기다 문정아ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",Integer.toString(length));
             for (int i = 0; i < length; i++) {
                 name_2 = name_1[i].split("  ");
 
@@ -231,7 +238,7 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
                 }
             }
 
-            Recycler_item[] item = new Recycler_item[10];
+            Recycler_item[] item = new Recycler_item[length];
             for (int i = 0; i < length; i++) {
                 item[i] = new Recycler_item(Url_front + img_Url[i], name[i], contentid[i], mapx[i], mapy[i]);
 
@@ -357,14 +364,14 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
             if(sigunguCode.equals("0")){
                 url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=" +
                         "7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
-                        "&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
+                        "&pageNo=1&numOfRows=20&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
                         "sigunguCode=" +
                         "&areaCode=" + areaCode +
                         "&listYN=Y";
             } else {
                 url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=" +
                         "7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
-                        "&pageNo=1&numOfRows=10&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
+                        "&pageNo=1&numOfRows=20&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
                         "sigunguCode=" + sigunguCode +
                         "&areaCode=" + areaCode +
                         "&listYN=Y";
@@ -482,4 +489,41 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
         mapView.addPOIItem(marker);
         Toast.makeText(getApplicationContext(),name,Toast.LENGTH_SHORT).show();
     }
+
+
+
+    //인터페이스 부분/ db에 넣는다.
+    @Override
+    public void make_db(String countId, String name) {
+        mDbOpenHelper.open();
+        mDbOpenHelper.insertColumn(countId, name);
+        mDbOpenHelper.close();
+    }
+
+
+
+    //인터페이스를 사용하는 이유 : 어댑터에서 함수를 사용하기가 까다로워서 -> 메인액티비티에서 함수를 만들고 어댑터에서 접근할 수 있도록 함
+    @Override
+    public void make_dialog() {
+        final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("관심관광지 추가 성공");
+        builder.setMessage("관심관광지 목록을 확인하시겠습니까?");
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //관심관광지 페이지로 감
+                Intent intent = new Intent(Page3_1_X.this, Heart_page.class);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
+
+
 }

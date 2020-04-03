@@ -2,6 +2,7 @@ package com.example.page3_0226;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -24,7 +25,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import java.util.List;
 
 public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.ViewHolder> {
-    private String stay = "OFF";  // 하트의 클릭 여부
+    private String[] stay = new String[100];  // 하트의 클릭 여부
+
+
     private Context context;
     private List<Page3_1_X.Recycler_item> items;  //리사이클러뷰 안에 들어갈 값 저장
     private Page3_1_x_OnItemClick mCallback;
@@ -45,25 +48,28 @@ public class Page3_1_x_Adapter extends RecyclerView.Adapter<Page3_1_x_Adapter.Vi
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Page3_1_X.Recycler_item item=items.get(position);
 
         //이미지뷰에 url 이미지 넣기.
         Glide.with(context).load(item.getImage()).centerCrop().into(holder.image);
         holder.title.setText(item.getTitle());
 
+        //하트누르면 내부 데이터에 저장
         holder.heart.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-                if(stay=="OFF"){
+                if(stay[position]==null){
                     holder.heart.setBackgroundResource(R.drawable.cardview_heart);
-                    stay = "ON";
-                    Toast.makeText(context,item.getTitle(),Toast.LENGTH_SHORT).show();
+                    mCallback.make_db(item.getContentviewID(), item.getTitle());   //countId랑 title을 db에 넣으려고 함( make_db라는 인터페이스 이용)
+                    mCallback.make_dialog();                                       //db에 잘 넣으면 띄우는 다이얼로그(위와 마찬가지로 인터페이스 이용
+                    stay[position] = "ON";
+
                 } else{
                     holder.heart.setBackgroundResource(R.drawable.cardview_heart_off);
-                    stay = "OFF";
-                    Toast.makeText(context,item.getTitle(),Toast.LENGTH_SHORT).show();
+                    stay[position] = null;
+                    Toast.makeText(context,"관심관광지를 취소했습니다",Toast.LENGTH_SHORT).show();
                 }
             }
         });
