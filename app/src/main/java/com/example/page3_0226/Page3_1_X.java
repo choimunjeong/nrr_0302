@@ -48,15 +48,17 @@ import java.util.concurrent.ExecutionException;
 public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClick{
 
     //역 이름을 받아서 지역코드랑 시군구코드 받기 위한 배열(현재 3개 지역만 넣어놔서 배열크기가 3임)
+    int station_code = 6;
     String[] arr_line = null;
-    String[] _name = new String[3];           //txt에서 받은 역이름
-    String[] _areaCode = new String[3];       //txt에서 받은 지역코드
-    String[] _sigunguCode = new String[3];    //txt에서 받은 시군구코드
-    String[] _x = new String[3];              //txt에서 받은 x좌표
-    String[] _y = new String[3];              //txt에서 받은 y좌표
-    String[] _benefitURL = new String[3];     //txt에서 받은 혜택url
+    String[] _name = new String[station_code];           //txt에서 받은 역이름
+    String[] _areaCode = new String[station_code];       //txt에서 받은 지역코드
+    String[] _sigunguCode = new String[station_code];    //txt에서 받은 시군구코드
+    String[] _x = new String[station_code];              //txt에서 받은 x좌표
+    String[] _y = new String[station_code];              //txt에서 받은 y좌표
+    String[] _benefitURL = new String[station_code];     //txt에서 받은 혜택url
     String st_name, areaCode, sigunguCode, benefitURL;            //전달받은 역의 지역코드, 시군구코드, 혜택URL
     Double x, y;                                      //전달받은 역의 x,y 좌표
+
 
     String name_1[] = new String[20];  //returnResult를 줄바꿈 단위로 쪼개서 넣은 배열/ name_1[0]에는 한 관광지의 이름,url,contentId,위치가 다 들어가 있다.
     String name_2[] = new String[5];  //name_1를 "  " 단위로 쪼개서 넣은 배열/ [0]= contentID/ [1]=mapx/ [2]에= mapy/ [3]= img_Url/ [4]= name이 들어가 있다.
@@ -364,16 +366,20 @@ public class Page3_1_X extends AppCompatActivity implements Page3_1_x_OnItemClic
             if(sigunguCode.equals("0")){
                 url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=" +
                         "7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
-                        "&pageNo=1&numOfRows=20&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
+                        "&pageNo=1&numOfRows=20&MobileApp=AppTest&MobileOS=ETC&arrange=B" +
+                        "&contentTypeId=12&"+
                         "sigunguCode=" +
                         "&areaCode=" + areaCode +
+                        "&cat1=A02&cat2=A0201&cat3=" +
                         "&listYN=Y";
             } else {
                 url = "https://api.visitkorea.or.kr/openapi/service/rest/KorService/areaBasedList?serviceKey=" +
                         "7LT0Q7XeCAuzBmGUO7LmOnrkDGK2s7GZIJQdvdZ30lf7FmnTle%2BQoOqRKpjcohP14rouIrtag9KOoCZe%2BXuNxg%3D%3D" +
-                        "&pageNo=1&numOfRows=20&MobileApp=AppTest&MobileOS=ETC&arrange=A&contentTypeId=12&" +
+                        "&pageNo=1&numOfRows=20&MobileApp=AppTest&MobileOS=ETC&arrange=B" +
+                        "&contentTypeId=12&" +
                         "sigunguCode=" + sigunguCode +
                         "&areaCode=" + areaCode +
+                        "&cat1=A02&cat2=A0201&cat3=" +
                         "&listYN=Y";
             }
 //

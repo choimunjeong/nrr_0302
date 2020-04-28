@@ -113,8 +113,12 @@ public class Page3_Fragment2 extends Fragment {
         places1.invisibleChildren.add(new Page3_Adapter.Item(Page3_Adapter.CHILD,"오송"));
         data.add(places1);
 
-        Page3_Adapter.Item places2 = new Page3_Adapter.Item(Page3_Adapter.HEADER, "충청권");
+        Page3_Adapter.Item places2 = new Page3_Adapter.Item(Page3_Adapter.HEADER, "전라권");
         places2.invisibleChildren = new ArrayList<>();
+        places2.invisibleChildren.add(new Page3_Adapter.Item(Page3_Adapter.CHILD,"전주"));
+        places2.invisibleChildren.add(new Page3_Adapter.Item(Page3_Adapter.CHILD,"군산"));
+
+
         data.add(places2);
 
         Page3_Adapter.Item places3 = new Page3_Adapter.Item(Page3_Adapter.HEADER, "충청권");
