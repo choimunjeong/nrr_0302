@@ -42,6 +42,10 @@
           <option name="url" value="https://github.com/choimunjeong/Page1_200430_mj.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/spotlight21c/viewpagerinrecyclerview.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="C:\Users\ctj12\Downloads" />
