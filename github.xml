@@ -3,5 +3,8 @@
     <account id="0da46466-030c-4065-adf5-6570d14d7bbb" name="ctj123@naver.com">
       <server host="github.com" />
     </account>
+    <account id="3cc7caf4-7688-4909-a91a-b4372a770515" name="yeonEarth">
+      <server host="github.com" />
+    </account>
   </component>
 </application>
